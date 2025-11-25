@@ -198,7 +198,8 @@ class ModbusFunctions:
         try:
             motor = self.get_motor(address)
             value = motor.read_register(self.REG_VOLTAGE, functioncode=4)
-            return 0.1/value  # Convert to Volts (0.1 V/digit)
+            #return 0.1/value  # orginal Convert to Volts (0.1 V/digit)
+            return value/10 # Added and tested that it shows real value by TNuppi 25.11.25
         except Exception as e:
             print(f"Error reading voltage from motor {address}: {e}")
             return None
