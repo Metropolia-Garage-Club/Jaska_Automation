@@ -11,6 +11,7 @@ moottorit = [
     if i not in puuttuvat_moottorit
 ]
 
+
 def sammuta():
     modbus.set_speed(0.0)
     app.shutdown()
@@ -30,10 +31,62 @@ def luo_moottori_ikkuna(moottori):
         ui.label(f'Moottori {moottori["id"]}').style('font-weight: bold; font-size: 20px; text-align: center;')
         
         # Nykyinen virta
-        virta_label = ui.label(f'Virta: {moottori["virta"]}A')
+        # -------- GAUGE / VIISARIMITTARI --------
+        virta_mittari_options = {
+    "series": [{
+        "type": "gauge",
+        "min": 0,
+        "max": 60,
+
+        "axisLine": {
+            "lineStyle": {
+                "width": 12,
+                "color": [
+                    [0.2, "#4caf50"],   # vihreä
+                    [0.8, "#ffeb3b"],   # keltainen
+                    [1.0, "#f44336"]    # punainen
+                ]
+            }
+        },
+
+        "axisLabel": {
+            "interval":10,
+            "color": "#000000",
+            "fontSize": 7
+        
+        },
+
+        "progress": {"show": False},
+        "detail": {"valueAnimation": True, "formatter": "{value} A", "fontSize": 15},
+        "data": [{"value": 0}]
+    }]
+}
+
+        taajus_mittari_options = {
+            "series": [{
+                "type": "gauge",
+                "min": 0,
+                "max": 200,
+                "progress": {"show": True},
+                "detail": {"valueAnimation": True, "formatter": "{value} Hz" ,"fontSize": 10},
+                "data": [{"value": 0}],
+                "axisLabel": {
+                            "interval":20,
+                            "color": "#000000",
+                            "fontSize": 7
+                            },
+                
+            }]
+        }
+        with ui.row().style("gap: 20px; justify-content: center"):
+                Virta_mittari = ui.echart(options=virta_mittari_options)\
+                    .style("height: 180px; width: 180px")
+                Taajuus_mittari = ui.echart(options=taajus_mittari_options)\
+                    .style("height: 180px; width: 180px")
+        #virta_label = ui.label(f'Virta: {moottori["virta"]}A')
         # nykyinen jännite
         jannite_label = ui.label(f'Jännite: {moottori["jannite"]}V')
-        taajuus_label = ui.label(f'Taajuus: {moottori["taajuus"]}Hz')
+        #taajuus_label = ui.label(f'Taajuus: {moottori["taajuus"]}Hz')
         pwm_label = ui.label(f'PWM: {moottori["pwm"]}')
         jarru_virta_label = ui.label(f'Jarru Virta: {moottori["jarru_virta"]}A')
         # Nykyinen asetusarvo
@@ -49,7 +102,7 @@ def luo_moottori_ikkuna(moottori):
                 arvo = float(input_field.value)
                 moottori['asetus'] = arvo
                 asetus_label.text = f'Asetus [0-1000]: {arvo}'
-                ui.notify(f'Moottori {moottori["id"]} asetettu: {arvo}')
+                ui.notify(f'Moottori {moottori["id"]} asetettu: {arvo}',position='center')
                 modbus.set_speed(moottori["id"],arvo)
             except ValueError:
                 ui.notify('Virheellinen arvo!', color='red')
@@ -79,26 +132,29 @@ def luo_moottori_ikkuna(moottori):
             moottori['jannite'] = arvot['voltage_V']
             moottori['taajuus'] = arvot['frequency_Hz']
             moottori['jarru_virta'] = arvot['brake_current_A']
-            virta_label.text = f'Virta: {moottori["virta"]}A'
+            moottori['pwm'] = arvot['pwm']
+            #virta_label.text = f'Virta: {moottori["virta"]}A'
             jannite_label.text = f'Jännite: {moottori["jannite"]}V'
-            taajuus_label.text = f'Taajuus: {moottori["taajuus"]}Hz'
+            #taajuus_label.text = f'Taajuus: {moottori["taajuus"]}Hz'
             pwm_label.text = f'PWM: {moottori["pwm"]}'
             jarru_virta_label.text = f'Jarru virta: {moottori["jarru_virta"]}A'
-
+            Virta_mittari.options['series'][0]['data'][0]['value'] = moottori['virta']
+            Virta_mittari.update()            
+            Taajuus_mittari.options['series'][0]['data'][0]['value'] = moottori['taajuus']
+            Taajuus_mittari.update()
         
         ui.timer(1.0, paivita_arvot)  # päivittää 1 sekunnin välein
 
 # Luo kaksi riviä: ensimmäinen 1,2,3 ja toinen 4,5,6
 # Skipataan puuttuvat moottori
 per_rivi = 2
-
 with ui.column():
     for rivi in range(0, len(moottorit), per_rivi):
         with ui.row():
             for moottori in moottorit[rivi:rivi + per_rivi]:
                 luo_moottori_ikkuna(moottori)
 
-
+ui.button("Pysäytä Kaikki moottorit",color='red', on_click= lambda: modbus.set_speed(0,0)).style('font-size: 15px')
 
 #ui.run(title='Moottoriohjaus - Reaaliaikainen')
 ui.run(host="0.0.0.0",port=8080, title="Moottoreiden testaus")
