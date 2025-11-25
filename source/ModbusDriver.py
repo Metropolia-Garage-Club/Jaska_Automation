@@ -176,7 +176,7 @@ class ModbusFunctions:
         try:
             motor = self.get_motor(address)
             value = motor.read_register(self.REG_CURRENT, functioncode=4)
-            return value  # Already in Amperes (1 A/digit)
+            return value/10  # Already in Amperes (1 A/digit) added "/10" By TNuppi 25.11.25
         except Exception as e:
             print(f"Error reading current from motor {address}: {e}")
             return None
