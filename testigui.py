@@ -6,7 +6,7 @@ puuttuvat_moottorit = [2,5,7]
 
 # moottoritiedot
 moottorit = [
-    {'id': i, 'virta': 0, 'asetus': 0, 'jannite':0,'taajuus':0,'pwm':0}
+    {'id': i, 'virta': 0, 'asetus': 0, 'jannite':0,'taajuus':0,'pwm':0, 'jarru_virta':0}
     for i in range(1, 7)
     if i not in puuttuvat_moottorit
 ]
@@ -30,11 +30,14 @@ def luo_moottori_ikkuna(moottori):
         ui.label(f'Moottori {moottori["id"]}').style('font-weight: bold; font-size: 20px; text-align: center;')
         
         # Nykyinen virta
-        virta_label = ui.label(f'Virta: {moottori["virta"]}')
+        virta_label = ui.label(f'Virta: {moottori["virta"]}A')
         # nykyinen jännite
-        jannite_label = ui.label(f'Jännite: {moottori["jannite"]}')
+        jannite_label = ui.label(f'Jännite: {moottori["jannite"]}V')
+        taajuus_label = ui.label(f'Taajuus: {moottori["taajuus"]}Hz')
+        pwm_label = ui.label(f'PWM: {moottori["pwm"]}')
+        jarru_virta_label = ui.label(f'Jarru Virta: {moottori["jarru_virta"]}A')
         # Nykyinen asetusarvo
-        asetus_label = ui.label(f'Asetus: {moottori["asetus"]}')
+        asetus_label = ui.label(f'Asetus [0-1000]: {moottori["asetus"]}')
         
         # Syöttökenttä ja nappi
         input_field = ui.input(placeholder='Uusi asetus')
@@ -62,7 +65,7 @@ def luo_moottori_ikkuna(moottori):
         def pysayta():
             modbus.set_speed(moottori["id"],0)
             ui.notify(f"Moottori {moottori['id']} pysäytetty")
-            asetus_label.text = "Asetus: 0"   
+            asetus_label.text = "Asetus [0-1000]: 0"   
         
         with ui.button_group():
             ui.button('Eteen', on_click=pyorita_eteen)
@@ -74,8 +77,14 @@ def luo_moottori_ikkuna(moottori):
             arvot = modbus.read_status(moottori['id'])
             moottori['virta'] = arvot['current_A']
             moottori['jannite'] = arvot['voltage_V']
-            virta_label.text = f'Virta: {moottori["virta"]}'
-            jannite_label.text = f'Jännite: {moottori["jannite"]}'
+            moottori['taajuus'] = arvot['frequency_Hz']
+            moottori['jarru_virta'] = arvot['brake_current_A']
+            virta_label.text = f'Virta: {moottori["virta"]}A'
+            jannite_label.text = f'Jännite: {moottori["jannite"]}V'
+            taajuus_label.text = f'Taajuus: {moottori["taajuus"]}Hz'
+            pwm_label.text = f'PWM: {moottori["pwm"]}'
+            jarru_virta_label.text = f'Jarru virta: {moottori["jarru_virta"]}A'
+
         
         ui.timer(1.0, paivita_arvot)  # päivittää 1 sekunnin välein
 
