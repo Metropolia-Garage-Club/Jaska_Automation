@@ -20,8 +20,22 @@ class ModbusFunctions:
     REG_BRAKE_CURRENT = 2   # 30003 - Braking current (1 A/digit)
     REG_VOLTAGE = 3         # 30004 - Supply voltage (0.1 V/digit)
     REG_FREQ = 4            # 30005 - Motor pulse frequency (0-255 Hz)
+    REG_IO_STOP13 = 5          # 30006 - I/O State
+    REG_IO_DIR = 6           # 30007 - I/O State direction
+    REG_IO_SPEED = 7        # 30008 - I/O State speed
+    REG_IO_ILM = 8          # 30009 - I/O State
+    REG_IO_DISABLE = 9      # 30010 - IO State
     REG_PWM = 10            # 30011 - Motor driving PWM (0-255, 255=100%)
-    
+    REG_SPEED2ENABLED = 11  # 30012 - Speed 2 enabled
+    REG_FAULT = 12          # 30013 - Fault indicated
+    REG_FAIL_CURRENT = 13   # 30014 - Fail from current
+    REG_FAIL_TEMP = 14      # 30015 - Fail from temperature
+    REG_FAIL_SUPPLY = 15    # 30016 - Fail from supply
+    REG_FAIL_OVERVOLTAGE = 16 # 30017 - Fail from overvoltage
+    REG_FAIL_SAFETY = 17    # 30018 - Fail from safety line
+    REG_FAIL_SAFETY_WIRE = 18 # 30019 - Fail from safetywire monitor
+
+
     def __init__(self, port: str=config.USB_Serial_Device, baudrate: int=19200, parity: str='E', 
                  stopbits: int=1, timeout: float=0.05, addresses: tuple=config.motor_addresses):
         """
@@ -167,7 +181,13 @@ class ModbusFunctions:
     @validate_modbus_address
     def read_direction(self, address):
         """Read the direction from the register of the motor controller"""
-        pass
+        try:
+            motor = self.get_motor(address)
+            value = motor.read_register(self.REG_IO_DIR, functioncode=4) # EI toimi antaa vaan arvoa 0 oli suunta mikä tahansa
+            return value  # 0 Forward 1 backward
+        except Exception as e:
+            print(f"Error reading direction from motor {address}: {e}")
+            return None
 
 
     @validate_modbus_address
@@ -237,6 +257,7 @@ class ModbusFunctions:
             'voltage_V': self.read_voltage(address),
             'frequency_Hz': self.read_frequency(address),
             'pwm': self.read_pwm(address),
+            'dir':self.read_direction(address)
         }
         return status
     
