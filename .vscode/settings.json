@@ -1,0 +1,8 @@
+{
+    "workbench.colorTheme": "Tomorrow Night Blue",
+    "window.titleBarStyle": "custom",
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#860b0b",
+    
+    }
+}
