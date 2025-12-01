@@ -22,3 +22,12 @@ You can use the left and right sticks to accelerate/decelerate the left and righ
 ### About turning
 
 This code was written with tank steering in mind. To turn while standing in place, pull one stick towards and push the other away to spin the left and right side in opposite directions. To turn while moving, steer so that the side you want to turn towards is moving slower than the other side.
+
+## What need to be fixed
+
+### Problems
+
+1. After starting the computer you need to unplug and plug USB RS485 converter to have modbus connection.
+
+2. Testigui gets stuck if there are communication errors on modbus slave devices. 
+
