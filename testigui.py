@@ -4,12 +4,15 @@ from source.ModbusDriver import modbus
 # Moottorit jotka ei ole käytössä
 puuttuvat_moottorit = [2,5,7]
 
+moottoreiden_sijainnit = {1:"Etu paarpuuri", 2:"Keski paarpuuri", 3:"Taka paarpuuri",
+                          4:"Etu styyrpuuri", 5:"Keski styyrpuuri", 6:"Taka styyrpuuri"}
 # moottoritiedot
 moottorit = [
     {'id': i, 'virta': 0, 'asetus': 0, 'jannite':0,'taajuus':0,'pwm':0, 'jarru_virta':0, 'suunta':"",'rpm':0}
     for i in range(1, 7)
     if i not in puuttuvat_moottorit
 ]
+
 
 
 def sammuta():
@@ -35,7 +38,7 @@ def luo_moottori_ikkuna(moottori):
     with ui.card().style('padding: 20px; min-width: 200px; margin:5px'):
         # Moottorin tunnus
         ui.label(f'Moottori {moottori["id"]}').style('font-weight: bold; font-size: 20px; text-align: center; margin: auto;')
-        
+        ui.label(f'{moottoreiden_sijainnit[ moottori["id"]]}').style('font-weight: bold; font-size: 20px; text-align: center; margin:auto;')
         # Nykyinen virta
         # -------- GAUGE / VIISARIMITTARI --------
         virta_mittari_options = {
@@ -92,8 +95,8 @@ def luo_moottori_ikkuna(moottori):
                 
         #virta_label = ui.label(f'Virta: {moottori["virta"]}A')
         # nykyinen jännite
-        ui.label("RPM").style("position:absolute; right:90px; top: 200px; font-weight: bold")
-        ui.label("VIRTA").style("position:absolute; left:90px; top: 200px; font-weight: bold")
+        ui.label("RPM").style("position:absolute; right:90px; top: 250px; font-weight: bold")
+        ui.label("VIRTA").style("position:absolute; left:90px; top: 250px; font-weight: bold")
         jannite_label = ui.label(f'Jännite: {moottori["jannite"]}V')
         #taajuus_label = ui.label(f'Taajuus: {moottori["taajuus"]}Hz')
         pwm_label = ui.label(f'PWM: {moottori["pwm"]}')
