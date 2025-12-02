@@ -1,0 +1,5 @@
+
+
+nicegui kontin luonti
+docker run -d   --name Jaska-nicegui   --device /dev/ttyUSB0:/dev/ttyUSB0   -p 8080:8080   --restart unless-stopped   niceguitesti:0.1
+
