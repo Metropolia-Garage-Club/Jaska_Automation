@@ -196,7 +196,15 @@ class ModbusFunctions:
         try:
             motor = self.get_motor(address)
             value = motor.read_register(self.REG_CURRENT, functioncode=4)
-            return value/10  # Already in Amperes (1 A/digit) added "/10" By TNuppi 25.11.25
+            # Modubus does not give real measured value. 
+            # tried to make some kind of scaling acording to real measured values. 
+            a = 0.0016794224417253174
+            b = 1.632749473028088
+            I = a * (value ** b)
+            if I < 0:
+                I = 0.0
+            return round(I, 2)
+            #return value  # Already in Amperes (1 A/digit) added "/10" By TNuppi 25.11.25
         except Exception as e:
             print(f"Error reading current from motor {address}: {e}")
             return None
@@ -207,7 +215,8 @@ class ModbusFunctions:
         try:
             motor = self.get_motor(address)
             value = motor.read_register(self.REG_BRAKE_CURRENT, functioncode=4)
-            return value  # Already in Amperes (1 A/digit)
+            #return value  # Already in Amperes (1 A/digit)
+            return value/10 # changed by TNuppi 11.12.2025
         except Exception as e:
             print(f"Error reading brake current from motor {address}: {e}")
             return None

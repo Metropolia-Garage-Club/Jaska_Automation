@@ -104,6 +104,7 @@ def luo_moottori_ikkuna(moottori):
         
         suunta_label = ui.label(f'Suunta: {moottori["suunta"]}')
         taajuus_label = ui.label(f'RPM: {moottori["taajuus"]}')
+        virta_label = ui.label(f'Virta: {moottori["virta"]}')
         # Nykyinen asetusarvo
         asetus_label = ui.label(f'Asetus [0-1000]: {moottori["asetus"]}')
         # Syöttökenttä ja nappi
@@ -161,6 +162,7 @@ def luo_moottori_ikkuna(moottori):
                 kierros_mittari.update()
                 suunta_label.text = f'Suunta: {moottori["suunta"]}'
                 taajuus_label.text = f'Taajuus: {moottori["taajuus"]} Hz'
+                virta_label.text = f'Virta: {moottori["virta"]}A'
             except Exception as e:
                 print(f"Virhe moottorin {moottori['id']} luennassa: {e}")
         ui.timer(1.0, paivita_arvot)  # päivittää 1 sekunnin välein
