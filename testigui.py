@@ -120,7 +120,7 @@ def luo_moottori_ikkuna(moottori):
                 ui.notify(f'Moottori {moottori["id"]} asetettu: {arvo}',position='center')
                 modbus.set_speed(moottori["id"],arvo)
             except ValueError:
-                ui.notify('Virheellinen arvo!', color='red')
+                ui.notify('Virheellinen arvo!', color='red',position='center')
         #määrittää moottorin pyörimis suunnan eteen
         def pyorita_eteen():
             modbus.set_direction(moottori["id"],0)
@@ -132,9 +132,9 @@ def luo_moottori_ikkuna(moottori):
         #pysäyttää moottorin
         def pysayta():
             modbus.set_speed(moottori["id"],0)
-            ui.notify(f"Moottori {moottori['id']} pysäytetty")
+            ui.notify(f"Moottori {moottori['id']} pysäytetty",position='center')
             asetus_label.text = "Asetus [0-1000]: 0"   
-        
+        # Luodaan nappi elementit vierekkäin
         with ui.button_group():
             ui.button('Eteen', on_click=pyorita_eteen)
             ui.button('Taakse',on_click=pyorita_taakse)
