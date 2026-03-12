@@ -72,13 +72,14 @@ Jos halutaan testata järjestelmän toiminnallisuutta siten, että kameran syvyy
 
 ```bash
 sensor_sim
+```
 ========================================
  Kamera-simulaattorin käynnistys
 ========================================
 ....
 ....
 ....
-```
+
 Käynnistä tämän jälkeen robottisovellus:
 ```bash
 jaskagui
