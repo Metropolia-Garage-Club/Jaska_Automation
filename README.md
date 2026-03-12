@@ -23,6 +23,14 @@ You can use the left and right sticks to accelerate/decelerate the left and righ
 
 This code was written with tank steering in mind. To turn while standing in place, pull one stick towards and push the other away to spin the left and right side in opposite directions. To turn while moving, steer so that the side you want to turn towards is moving slower than the other side.
 
+### How to use the Parameter configuration tool
+
+You can use the tool with 'python param_config.py /dev/ttyUSBx' where x is a number of the serial device currently corresponding to the modbus-to-serial converter. (0 to 4 usually)
+You can find available devices with 'ls /dev | grep ttyUSB*'
+Try selecting a device and doing "read" command. If you get a garbled message back, try another USBx device and check that the MOTOR CONTROLLERS ARE POWERED.
+
+
+
 ## What need to be fixed
 
 ### Problems
@@ -31,7 +39,6 @@ This code was written with tank steering in mind. To turn while standing in plac
     - Something causes the device to sometimes re-register using another ttyUSBx number, leading to get_device_path() returning wrong device.
     - This should mean there are duplicate USB devices in? Or maybe its another USB device being connected to. Need to check.
 
-You can find available devices with 'ls /dev | grep ttyUSB*'
 
 2. Testigui gets stuck if there are communication errors on modbus slave devices. 
 
