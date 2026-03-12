@@ -37,22 +37,21 @@ Kun tietokone on käynnistynyt, robotti on käyttövalmis.
 Yhteys robotin tietokoneeseen muodostetaan esimerkiksi seuraavasti:
 
 ```bash
-olliopiskelija@tietokone:~$ ssh user@192.168.123.175
-user@192.168.123.175's password: admin
+ssh user@192.168.123.175
 ```
 ### Sovelluksen käynnistäminen
 
 Ohjelma käynnistetään Jaskassa olevassa **ZEDBOX**-tietokoneessa suorittamalla seuraava komento:
 
 ```bash
-user@GTW-ONX16-ubuntu:~$ jaskagui
+jaskagui
 ```
 ---
 
 ### Käyttöliittymä
 Avaa selain laitteella, joka on samassa verkossa kuin robotti(Robo_Device_net_5G), ja siirry osoitteeseen:
 ```
- http://192.168.123.175:8080/   
+http://192.168.123.175:8080/   
 ```
 (vaihtoehtoisesti: http://[robotin IP-osoite]:8080) 
 Selain avaa graafisen käyttöliittymän, jonka avulla robottia voidaan ohjata ja sen tilaa seurata.
@@ -72,7 +71,7 @@ Selain avaa graafisen käyttöliittymän, jonka avulla robottia voidaan ohjata j
 Jos halutaan testata järjestelmän toiminnallisuutta siten, että kameran syvyys-, IMU- ja IO-tiedot ovat simuloituja, suorita seuraava komento:
 
 ```bash
-user@GTW-ONX16-ubuntu:~$ sensor_sim
+sensor_sim
 ========================================
  Kamera-simulaattorin käynnistys
 ========================================
@@ -82,19 +81,19 @@ user@GTW-ONX16-ubuntu:~$ sensor_sim
 ```
 Käynnistä tämän jälkeen robottisovellus:
 ```bash
-user@GTW-ONX16-ubuntu:~$ jaskagui
+jaskagui
 ```
 Avaa lopuksi toisessa terminaalissa sensor_sim_ui-käyttöliittymä, jolla voidaan syöttää simuloitua anturidataa järjestelmälle.
 
 ```bash
-user@GTW-ONX16-ubuntu:~$ sensor_sim_ui
+sensor_sim_ui
 ```
 ![sensor_sim_ui](media/photos/sensor_sim_ui.png)
 
 
 Sensor simulaattori voidaan sulkea suorittamalla komento:
 ```bash
-user@GTW-ONX16-ubuntu:~$ sensor_sim_down
+sensor_sim_down
 ```
 > **HUOM!**
 > Jos käyttö liittymä ei tunnista simuloituja antureita niin,
@@ -103,7 +102,7 @@ user@GTW-ONX16-ubuntu:~$ sensor_sim_down
 > varmista että ympäristö muuttujilla "IMU_URL, IO_URL ja CAMERA_URL" osoitteet on oikein.
 > muuttujat voi varmistaa esimerkiksi komennolla:
 ```bash 
-user@GTW-ONX16-ubuntu:~$ echo $CAMERA_AVAILABLE
+echo $CAMERA_AVAILABLE
 ```
 > tämän jälkeen pitäisi tulla vastaus
 ```bash 
