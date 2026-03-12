@@ -74,7 +74,7 @@ class ModbusFunctions:
         """
         
         try:
-            instrument = minimalmodbus.Instrument(self.port, address)
+            instrument = minimalmodbus.Instrument(self.port, address, debug=True)
             
             if instrument.serial is None:
                 raise ValueError(f"Serial port {self.port} not found")
@@ -150,6 +150,7 @@ class ModbusFunctions:
             print(f"Motor {address}: Speed set to {speed}")
         except Exception as e:
             print(f"Error setting speed for motor {address}: {e}")
+            motor.write_register(self.REG_SPEED, int(speed), functioncode=6) # Resend command
     
     def set_direction(self, address: int=0, direction: int=0):
         """Set motor direction for a specific motor, use address 0 for all motors"""
@@ -162,6 +163,7 @@ class ModbusFunctions:
             print(f"Motor {address}: Direction set to {direction}")
         except Exception as e:
             print(f"Error setting direction for motor {address}: {e}")
+            motor.write_register(self.REG_DIR, direction, functioncode=6) #Resend command
     
     def set_disable(self, address: int=0, disable: int=0):
         """Enable or disable a specific motor, use address 0 for all motors"""

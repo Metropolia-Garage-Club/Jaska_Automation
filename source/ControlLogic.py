@@ -4,8 +4,8 @@ from .ModbusDriver import modbus
 # This script is responsible for the motor control logic. The functions handle the driving logic on the controller level, keeping track of direction (DIR register)
 class MotorDriver:
     def __init__(self):
-        self.FORWARD = 0
-        self.REVERSE = 1
+        self.FORWARD = 0 
+        self.REVERSE = 1 
         
         # Track current direction for each side
         self.current_left_dir = self.FORWARD
@@ -46,7 +46,7 @@ class MotorDriver:
                 modbus.set_speed(address, 0)
             return
         
-        self._set_left_direction(self.get_direction(value))
+        self._set_left_direction(not self.get_direction(value)) # Flip the direction for left side because the wheels are mirrored
 
         for address in config.left_motor_addresses:
             modbus.set_speed(address, abs(value)) # Make sure to always pass the absolute value to the motor controllers

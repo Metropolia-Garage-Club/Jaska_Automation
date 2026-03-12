@@ -1,9 +1,11 @@
 from nicegui import ui, app
 from source.ModbusDriver import modbus
 
+valitus_suhde = 1/4.5
 # Moottorit jotka ei ole käytössä
 puuttuvat_moottorit = [2,5,7]
-
+paarpuurin_moottorit = [1,2,3]
+styyrpuurin_moottorit = [4,5,6]
 moottoreiden_sijainnit = {1:"Etu paarpuuri", 2:"Keski paarpuuri", 3:"Taka paarpuuri",
                           4:"Etu styyrpuuri", 5:"Keski styyrpuuri", 6:"Taka styyrpuuri"}
 # moottoritiedot
@@ -123,11 +125,17 @@ def luo_moottori_ikkuna(moottori):
                 ui.notify('Virheellinen arvo!', color='red',position='center')
         #määrittää moottorin pyörimis suunnan eteen
         def pyorita_eteen():
-            modbus.set_direction(moottori["id"],0)
+            if moottori["id"] in styyrpuurin_moottorit:
+                modbus.set_direction(moottori["id"],0)
+            else:
+                modbus.set_direction(moottori["id"],1)
             validoi_asetus()
         #määrittää moottorin pyörimis suunnan taakse
         def pyorita_taakse():
-            modbus.set_direction(moottori["id"],1) 
+            if moottori["id"] in styyrpuurin_moottorit:
+                modbus.set_direction(moottori["id"],1) 
+            else:
+                modbus.set_direction(moottori["id"],0)
             validoi_asetus()
         #pysäyttää moottorin
         def pysayta():
@@ -150,7 +158,7 @@ def luo_moottori_ikkuna(moottori):
                 moottori['jarru_virta'] = arvot['brake_current_A']
                 moottori['pwm'] = arvot['pwm']
                 moottori['suunta'] = arvot['dir']
-                moottori['rpm'] = 60*moottori['taajuus']/15
+                moottori['rpm'] = int((60*moottori['taajuus']/10)*valitus_suhde)
                 #virta_label.text = f'Virta: {moottori["virta"]}A'
                 jannite_label.text = f'Jännite: {moottori["jannite"]}V'
                 #taajuus_label.text = f'Taajuus: {moottori["taajuus"]}Hz'

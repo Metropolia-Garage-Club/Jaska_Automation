@@ -27,7 +27,15 @@ This code was written with tank steering in mind. To turn while standing in plac
 
 ### Problems
 
-1. After starting the computer you need to unplug and plug USB RS485 converter to have modbus connection.
+1. After starting the computer you need to unplug and plug USB RS485 converter to have modbus connection. 
+    - Something causes the device to sometimes re-register using another ttyUSBx number, leading to get_device_path() returning wrong device.
+    - This should mean there are duplicate USB devices in? Or maybe its another USB device being connected to. Need to check.
+
+You can find available devices with 'ls /dev | grep ttyUSB*'
 
 2. Testigui gets stuck if there are communication errors on modbus slave devices. 
+
+3. Direction or speed goes out of sync - MODBUS traffic jam causes the packet being sent to one or more controllers on change to drop, leading to
+that motor going out of sync. -> Temporary fix in ModbusDriver.py that writes the command again everytime the modbus call returns and exception.
+(Bit of a bad hack but seems to work)
 

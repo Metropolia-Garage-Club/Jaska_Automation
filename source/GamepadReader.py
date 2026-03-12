@@ -158,7 +158,7 @@ async def read_gamepad(queue):
                 await asyncio.sleep(0.1)
                 continue
                     
-            await asyncio.sleep(0.01)  # 100Hz
+            await asyncio.sleep(0.02)  # 100Hz
             
     except KeyboardInterrupt:
         print("EXITING NOW")

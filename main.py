@@ -100,7 +100,7 @@ async def process_commands(queue):
         control_type, id, value = await queue.get()
         pending_commands[(control_type, id)] = value
        
-        # Drain any additional items
+        # # Drain any additional items
         while not queue.empty():
             try:
                 control_type, id, value = queue.get_nowait()
