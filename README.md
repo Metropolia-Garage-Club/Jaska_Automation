@@ -25,9 +25,12 @@ This code was written with tank steering in mind. To turn while standing in plac
 
 ### How to use the Parameter configuration tool
 
-You can use the tool with 'python param_config.py /dev/ttyUSBx' where x is a number of the serial device currently corresponding to the modbus-to-serial converter. (0 to 4 usually)
-You can find available devices with 'ls /dev | grep ttyUSB*'
+You can use the tool with ```python param_config.py /dev/ttyUSBx``` where x is a number of the serial device currently corresponding to the modbus-to-serial converter. (0 to 4 usually)
+You can find available devices with ```ls /dev | grep ttyUSB*```
 Try selecting a device and doing "read" command. If you get a garbled message back, try another USBx device and check that the MOTOR CONTROLLERS ARE POWERED.
+
+#### IMPORTANT!
+Do not change the Modbus parameters (BAUD, par 21 & Address, par 22)! If you do, the only way to reset the device is by using the Ementool USB device, which means you have to take the rack out of jaska, remove all components and take out the motor controller board to be able to access the flashing port.
 
 
 
